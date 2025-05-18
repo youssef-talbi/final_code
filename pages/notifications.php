@@ -60,13 +60,9 @@ require_once __DIR__ . "/../includes/header.php";
                         // Basic icon based on type
                         $icon_class = "fas fa-info-circle"; // Default
                         switch ($notification["type"]) {
-                            case "message": $icon_class = "fas fa-envelope"; break;
                             case "project": $icon_class = "fas fa-briefcase"; break;
                             case "proposal": $icon_class = "fas fa-file-alt"; break;
                             case "contract": $icon_class = "fas fa-handshake"; break;
-                            case "payment": $icon_class = "fas fa-dollar-sign"; break;
-                            case "review": $icon_class = "fas fa-star"; break;
-                            case "system": $icon_class = "fas fa-cog"; break;
                         }
                         ?>
                         <i class="<?php echo $icon_class; ?>"></i>
