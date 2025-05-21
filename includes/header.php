@@ -4,7 +4,7 @@ require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/../utils/Helpers.php';
 
 // Set base URL relative to your project folder
-$baseUrl="/final_code";
+$baseUrl = "/final_code";
 
 // Fetch unread notification count for logged-in user
 $unread_notification_count = 0;
@@ -12,17 +12,23 @@ if (is_logged_in()) {
     try {
         $db = getDbConnection();
         $user_id = get_current_user_id();
-        $stmt = $db->prepare("SELECT COUNT(*) FROM notifications WHERE user_id = :user_id AND read_status = 0");
-        $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
-        $stmt->execute();
-        $unread_notification_count = $stmt->fetchColumn();
+
+        
+        $user_id = (int)$user_id;
+
+        $sql = "SELECT COUNT(*) FROM notifications WHERE user_id = $user_id AND read_status = 0";
+        $result = $db->query($sql);
+
+        if ($result) {
+            $unread_notification_count = $result->fetchColumn();
+        }
     } catch (PDOException $e) {
         error_log("Failed to fetch notification count: " . $e->getMessage());
-        // Handle error appropriately, maybe show 0 or an error indicator
+
     }
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,18 +36,18 @@ if (is_logged_in()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($page_title) ? htmlspecialchars($page_title) . " - " : ""; ?>Freelance Hub</title>
 
-    <!-- Google Fonts -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Main CSS -->
+
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>/assets/css/main.css">
 
-    <!-- Font Awesome for Icons -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- Add specific CSS for notifications dropdown if needed -->
+
     <style>
         .notification-badge {
             background-color: red;
